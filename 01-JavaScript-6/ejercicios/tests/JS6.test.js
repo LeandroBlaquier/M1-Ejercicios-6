@@ -1,61 +1,77 @@
 /* eslint-disable no-undef */
 const {
-  crearUsuario,
-  agregarMetodoPrototype,
-  agregarStringInvertida,
-  crearInstanciaPersona,
-  agregarMetodo,
-  Persona,
+  mayuscula,
+  invocarCallback,
+  operacionMatematica,
+  sumarArray,
+  forEach,
+  map,
+  filter,
 } = require('../practica');
 
-describe('crearUsuario()', function () {
-  it('should return a user constructor that correctly builds user objects', function () {
-    const Usuario = crearUsuario();
-    const user = new Usuario({
-      usuario: 'jssamuel',
-      nombre: 'Samuel',
-      email: 'samuel@email.com',
-      password: 'LoveJS',
+describe('mayuscula(nombre)', function () {
+  it('should return the same name with the first letter capitalized', function () {
+    expect(mayuscula('mario')).toBe('Mario');
+    expect(mayuscula('ana')).toBe('Ana');
+  });
+});
+
+describe('invocarCallback(cb)', function () {
+  it('should invoke the callback that is passed in', function () {
+    const cb = jest.fn();
+    invocarCallback(cb);
+    expect(cb).toHaveBeenCalled();
+  });
+});
+
+describe('operacionMatematica(n1, n2, cb)', function () {
+  it('should return the callback function passing it the received arguments', function () {
+    const cb = jest.fn();
+    operacionMatematica(100, 20, cb);
+    expect(cb).toHaveBeenCalled();
+  });
+});
+
+describe('sumarArray(cb)', function () {
+  it('should pass the sum of all array numbers to cb', function (done) {
+    sumarArray([1, 2, 3, 4, 5], function (sum) {
+      expect(sum).toBe(15);
+      done();
     });
-    expect(user.usuario).toBe('jssamuel');
-    expect(user.nombre).toBe('Samuel');
-    expect(user.email).toBe('samuel@email.com');
-    expect(user.password).toBe('LoveJS');
-    expect(user.saludar()).toBe('Hola, mi nombre es Samuel');
   });
 });
 
-describe('agregarMetodoPrototype(Constructor)', function () {
-  it('should add the method saludar to the constructor', function () {
-    function Test() {
-      this.test = true;
-    }
-    agregarMetodoPrototype(Test);
-    const test = new Test();
-    expect(test.saludar()).toBe('Hello World!');
+describe('forEach(arr, cb)', function () {
+  it('should pass all array items one by one to cb', function () {
+    const nums = [];
+    forEach([1, 2, 3, 4, 5], function (num) {
+      nums.push(num);
+    });
+    expect(nums).toEqual([1, 2, 3, 4, 5]);
   });
 });
 
-describe('agregarStringInvertida(StringPrototype)', function () {
-  it('should add a reverse string method to the String prototype that returns a reversed version of the string', function () {
-    agregarStringInvertida();
-    const str = 'Hello';
-    expect(str.reverse()).toBe('olleH');
+describe('map(arr, cb)', function () {
+  it('should return an array of all the processed array elements', function () {
+    const squares = map([1, 2, 3, 4, 5], function (num) {
+      return num * num;
+    });
+    expect(squares).toEqual([1, 4, 9, 16, 25]);
   });
 });
 
-describe('crearInstanciaPersona()', function () {
-  it('should return a new instance of Persona', function () {
-    expect(
-      crearInstanciaPersona('Juan', 'Pérez', 22, 'Saavedra 123')
-    ).toBeInstanceOf(Persona);
-  });
-});
-
-describe('agregarMetodo(Persona)', function () {
-  it('should add the method datos to the constructor', function () {
-    agregarMetodo();
-    const persona = new Persona('Juan', 'Pérez', 22, 'Saavedra 123');
-    expect(persona.datos()).toBe('Juan, 22 años');
+describe('filter(array)', function () {
+  it('should return an array conteining the words that starts with "a"', function () {
+    var array = [
+      'abajo',
+      'pera',
+      'escalera',
+      'alerta',
+      'indice',
+      'azteca',
+      'arbol',
+      'buzo',
+    ];
+    expect(filter(array)).toEqual(['abajo', 'alerta', 'azteca', 'arbol']);
   });
 });
